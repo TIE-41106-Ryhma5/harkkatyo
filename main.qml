@@ -24,14 +24,14 @@ ApplicationWindow {
 
 
     ProximitySensor{
-            id: proxSensor
-            active: true
+        id: proxSensor
+        active: true
 
-            onReadingChanged: {
-                if (proxSensor.reading.near === true){
-                    naytaNappaimisto()
-                }
+        onReadingChanged: {
+            if (proxSensor.reading.near === true){
+                naytaNappaimisto()
             }
+        }
     }
 
     Timer {
@@ -135,6 +135,23 @@ ApplicationWindow {
     }
 
     Label {
+        id: label_syotaPIN
+        x: 271
+        y: 230
+        color: "#676767"
+        text: qsTr("SYOTÄ PIN-KOODISI")
+        opacity: 0
+        font.pixelSize: 58
+        anchors.horizontalCenter: parent.horizontalCenter
+        verticalAlignment: Text.AlignVCenter
+        horizontalAlignment: Text.AlignHCenter
+
+        Behavior on opacity {
+            NumberAnimation { duration : haivytysaika }
+        }
+    }
+
+    Label {
         id: label_asetaOpKortti
         x: 165
         y: 788
@@ -171,7 +188,7 @@ ApplicationWindow {
     }
 
     Image {
-        id: opKortti
+        id: image_opKortti
         x: 433
         y: 961
         width: 255
@@ -179,6 +196,12 @@ ApplicationWindow {
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.Tile
         source: "pics/OpKortti.png"
+        opacity: 1.0
+
+        Behavior on opacity {
+            NumberAnimation { duration: haivytysaika }
+        }
+
     }
 
     Grid {
@@ -195,6 +218,11 @@ ApplicationWindow {
         rows: 4
         columns: 3
         visible: false
+        opacity: 0
+
+        Behavior on opacity{
+            NumberAnimation { duration: haivytysaika }
+        }
 
 
         Button {
@@ -206,11 +234,21 @@ ApplicationWindow {
             activeFocusOnPress: false
 
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -221,18 +259,25 @@ ApplicationWindow {
             width: 180
             height: 180
             text: qsTr("8")
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
-            }
-
-            onClicked:{
-                button_nro8.text = qsTr("10")
             }
         }
 
@@ -244,12 +289,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("9")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -261,12 +317,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("4")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -278,12 +345,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("5")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -295,12 +373,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("6")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -312,12 +401,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("1")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -329,12 +429,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("2")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -346,12 +457,23 @@ ApplicationWindow {
             height: 180
             text: qsTr("3")
             opacity: 1
+
             style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
                     font.pixelSize: 80
+                    color: "#676767"
                     text: control.text
                 }
             }
@@ -404,6 +526,18 @@ ApplicationWindow {
         height: 100
         fillMode: Image.PreserveAspectFit
         source: "pics/UKLippu.png"
+
+        Text {
+            id: text_in_English
+            x: -7
+            y: 90
+            text: qsTr("IN ENGLISH")
+            anchors.horizontalCenter: parent.horizontalCenter
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: 25
+            color: "#676767"
+        }
     }
 
     MouseArea {
@@ -442,9 +576,9 @@ ApplicationWindow {
 
         onPositionChanged: {
             if (    ( sormiX > mouseArea1.mouseX + sormiToleranssi)
-                || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
-                || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
-                || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
+                    || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
+                    || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
+                    || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
 
                 rectangle_clicked.opacity = 1.0
                 rectangle_clicked.color = "#cb003a"
@@ -555,11 +689,30 @@ ApplicationWindow {
         }
     }
 
+    Rectangle {
+        id: rectangle_tausta
+        x: 0
+        y: 0
+        width: 1080
+        height: 1920
+        color: "#ffffff"
+        z: -2
+    }
+
+
+
     function naytaNappaimisto(){
         if (rectangle_oviAuki.visible !== true){
             rectangle_ylapohja.height = 0
             label_oviLukossa.opacity = 0.0
+
+            image_opKortti.opacity = 0.0
+            label_asetaOpKortti.opacity = 0.0
+
             grid1.visible = true
+            grid1.opacity = 1.0
+
+            label_syotaPIN.opacity = 1.0
         }
     }
 
