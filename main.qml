@@ -429,7 +429,7 @@ ApplicationWindow {
             label_lueSormJalki.text = qsTr("SORMENJÄLKEÄ LUETAAN...")
 
             image_sormenjalki.opacity = 0.0
-            image_sormenjalki_enabled.opacity = 1.0
+            image_sormenjalki_vaalea.opacity = 1.0
 
             sormiX = mouseArea1.mouseX
             sormiY = mouseArea1.mouseY
@@ -484,7 +484,7 @@ ApplicationWindow {
         label_lueSormJalki.text = qsTr("TAI LUE SORMENJÄLKESI")
 
         image_sormenjalki.opacity = 1.0
-        image_sormenjalki_enabled.opacity = 0.0
+        image_sormenjalki_vaalea.opacity = 0.0
     }
 
     Rectangle {
