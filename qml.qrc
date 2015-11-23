@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>pics/Raidat.png</file>
+        <file>pics/TTY.png</file>
+        <file>fonts/MyriadPro-Regular.ttf</file>
+        <file>pics/OpKortti.png</file>
+        <file>pics/Sormenjalki.png</file>
+        <file>pics/ukFlag.png</file>
+        <file>pics/SormenjalkiEnabled.png</file>
+    </qresource>
+</RCC>
