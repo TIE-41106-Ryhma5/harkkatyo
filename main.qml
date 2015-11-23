@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     width: 1080
     height: 1920
-    title: qsTr("Ovijarjestelma")
+    title: qsTr("Avaax Ovijarjestelma")
 
     property int animaatioaika
     property int palautumisaika : 300
@@ -19,8 +19,9 @@ ApplicationWindow {
 
     property real sormiX
     property real sormiY
-    property int eptktolerans: 10
-    property bool epaonnistunut
+    property int sormiToleranssi: 10 // Toleranssi, jonka verran sormi saa liikkua ennen virheilmoitusta
+    property bool epaonnistunut // Jos sormenjäljen lukeminen epäonnistuu
+
 
     ProximitySensor{
             id: proxSensor
@@ -377,7 +378,7 @@ ApplicationWindow {
     }
 
     Image {
-        id: image_sormenjalki_enabled
+        id: image_sormenjalki_vaalea
         x: 515
         y: 1509
         z: 1
@@ -386,7 +387,7 @@ ApplicationWindow {
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.Tile
-        source: "pics/SormenjalkiEnabled.png"
+        source: "pics/SormenjalkiVaalea.png"
 
         opacity: 0
 
@@ -402,7 +403,7 @@ ApplicationWindow {
         width: 120
         height: 100
         fillMode: Image.PreserveAspectFit
-        source: "pics/ukFlag.png"
+        source: "pics/UKLippu.png"
     }
 
     MouseArea {
@@ -440,8 +441,10 @@ ApplicationWindow {
         }
 
         onPositionChanged: {
-            if (( sormiX > mouseArea1.mouseX + eptktolerans) || ( sormiX < mouseArea1.mouseX - eptktolerans)
-                    || ( sormiY > mouseArea1.mouseY + eptktolerans) || (sormiY < mouseArea1.mouseY - eptktolerans)){
+            if (    ( sormiX > mouseArea1.mouseX + sormiToleranssi)
+                || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
+                || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
+                || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
 
                 rectangle_clicked.opacity = 1.0
                 rectangle_clicked.color = "#cb003a"
