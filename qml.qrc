@@ -1,11 +1,15 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>pics/Raidat.png</file>
-        <file>pics/TTY.png</file>
-        <file>pics/OpKortti.png</file>
-        <file>pics/Sormenjalki.png</file>
-        <file>pics/UKLippu.png</file>
-        <file>pics/SormenjalkiVaalea.png</file>
+        <file>sounds/klikkaus1.mp3</file>
+        <file>sounds/merkkiaani1.mp3</file>
+        <file>sounds/merkkiaani2.mp3</file>
+        <file>sounds/klikkaus2.mp3</file>
+        <file>images/OpKortti.png</file>
+        <file>images/Raidat.png</file>
+        <file>images/Sormenjalki.png</file>
+        <file>images/SormenjalkiVaalea.png</file>
+        <file>images/TTY.png</file>
+        <file>images/UKLippu.png</file>
     </qresource>
 </RCC>

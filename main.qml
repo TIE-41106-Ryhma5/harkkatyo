@@ -2,6 +2,7 @@ import QtQuick 2.3
 import QtQuick.Controls 1.2
 import QtQuick.Controls.Styles 1.4
 import QtSensors 5.0
+import QtMultimedia 5.5
 
 ApplicationWindow {
     id: applicationWindow1
@@ -22,6 +23,33 @@ ApplicationWindow {
     property int sormiToleranssi: 10 // Toleranssi, jonka verran sormi saa liikkua ennen virheilmoitusta
     property bool epaonnistunut // Jos sormenjäljen lukeminen epäonnistuu
 
+    Audio {
+        id: sound_painallus
+        source: "sounds/klikkaus2.mp3"
+
+        autoLoad: true
+        autoPlay: false
+        volume: 1.0
+    }
+
+    Audio {
+        id: sound_onnistunut
+        source: "sounds/merkkiaani1.mp3"
+
+        autoLoad: true
+        autoPlay: false
+        volume: 1.0
+    }
+
+    Audio {
+        id: sound_epaonnistunut
+        source: "sounds/merkkiaani2.mp3"
+
+        autoLoad: true
+        autoPlay: false
+        volume: 1.0
+    }
+
 
     ProximitySensor{
         id: proxSensor
@@ -30,6 +58,7 @@ ApplicationWindow {
         onReadingChanged: {
             if (proxSensor.reading.near === true){
                 naytaNappaimisto()
+                soitaOnnistunut()
             }
         }
     }
@@ -63,6 +92,10 @@ ApplicationWindow {
             rectangle_oviAuki.opacity = 0.0
             grid1.visible = false
             odotusaika.start()
+
+            label_syotaPIN.opacity = 0.0
+            image_opKortti.opacity = 1.0
+            label_asetaOpKortti.opacity = 1.0
         }
     }
 
@@ -82,7 +115,7 @@ ApplicationWindow {
         width: 52
         height: 1752
         fillMode: Image.Tile
-        source: "pics/Raidat.png"
+        source: "images/Raidat.png"
     }
 
     Image {
@@ -92,7 +125,7 @@ ApplicationWindow {
         width: 597
         height: 100
         fillMode: Image.Tile
-        source: "pics/TTY.png"
+        source: "images/TTY.png"
     }
 
     Rectangle {
@@ -139,7 +172,7 @@ ApplicationWindow {
         x: 271
         y: 230
         color: "#676767"
-        text: qsTr("SYOTÄ PIN-KOODISI")
+        text: qsTr("SYÖTÄ PIN-KOODISI")
         opacity: 0
         font.pixelSize: 58
         anchors.horizontalCenter: parent.horizontalCenter
@@ -195,7 +228,7 @@ ApplicationWindow {
         height: 200
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.Tile
-        source: "pics/OpKortti.png"
+        source: "images/OpKortti.png"
         opacity: 1.0
 
         Behavior on opacity {
@@ -218,7 +251,7 @@ ApplicationWindow {
         rows: 4
         columns: 3
         visible: false
-        opacity: 0
+        opacity: 0.0
 
         Behavior on opacity{
             NumberAnimation { duration: haivytysaika }
@@ -252,6 +285,10 @@ ApplicationWindow {
                     text: control.text
                 }
             }
+
+            onClicked: {
+                soitaNappainaani()
+            }
         }
 
         Button {
@@ -278,6 +315,10 @@ ApplicationWindow {
                     color: "#676767"
                     text: control.text
                 }
+            }
+
+            onClicked: {
+                soitaNappainaani()
             }
         }
 
@@ -309,6 +350,10 @@ ApplicationWindow {
                     text: control.text
                 }
             }
+
+            onClicked: {
+                soitaNappainaani()
+            }
         }
 
         Button {
@@ -336,6 +381,10 @@ ApplicationWindow {
                     color: "#676767"
                     text: control.text
                 }
+            }
+
+            onClicked: {
+                soitaNappainaani()
             }
         }
 
@@ -365,6 +414,10 @@ ApplicationWindow {
                     text: control.text
                 }
             }
+
+            onClicked: {
+                soitaNappainaani()
+            }
         }
 
         Button {
@@ -392,6 +445,10 @@ ApplicationWindow {
                     color: "#676767"
                     text: control.text
                 }
+            }
+
+            onClicked: {
+                soitaNappainaani()
             }
         }
 
@@ -421,6 +478,10 @@ ApplicationWindow {
                     text: control.text
                 }
             }
+
+            onClicked: {
+                soitaNappainaani()
+            }
         }
 
         Button {
@@ -448,6 +509,10 @@ ApplicationWindow {
                     color: "#676767"
                     text: control.text
                 }
+            }
+
+            onClicked: {
+                soitaNappainaani()
             }
         }
 
@@ -477,6 +542,74 @@ ApplicationWindow {
                     text: control.text
                 }
             }
+
+            onClicked: {
+                soitaNappainaani()
+            }
+        }
+
+        Button {
+            id: button_backspace
+            width: 180
+            height: 180
+            text: qsTr("<-")
+            opacity: 1
+
+            style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
+                label: Text {
+                    renderType: Text.NativeRendering
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 80
+                    color: "#676767"
+                    text: control.text
+                }
+            }
+
+            onClicked: {
+                soitaNappainaani()
+            }
+        }
+
+        Button {
+            id: button_nro0
+            width: 180
+            height: 180
+            text: qsTr("0")
+            opacity: 1
+
+            style: ButtonStyle {
+                background: Rectangle {
+                    implicitWidth: 180
+                    implicitHeight: 180
+                    border.width: 0
+                    radius : 2
+
+                    color: "#ececec"
+                }
+
+                label: Text {
+                    renderType: Text.NativeRendering
+                    verticalAlignment: Text.AlignVCenter
+                    horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: 80
+                    color: "#676767"
+                    text: control.text
+                }
+            }
+
+            onClicked: {
+                soitaNappainaani()
+            }
         }
     }
 
@@ -490,7 +623,7 @@ ApplicationWindow {
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.Tile
-        source: "pics/Sormenjalki.png"
+        source: "images/Sormenjalki.png"
 
         opacity: 1
 
@@ -509,7 +642,7 @@ ApplicationWindow {
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.Tile
-        source: "pics/SormenjalkiVaalea.png"
+        source: "images/SormenjalkiVaalea.png"
 
         opacity: 0
 
@@ -525,7 +658,7 @@ ApplicationWindow {
         width: 120
         height: 100
         fillMode: Image.PreserveAspectFit
-        source: "pics/UKLippu.png"
+        source: "images/UKLippu.png"
 
         Text {
             id: text_in_English
@@ -579,6 +712,7 @@ ApplicationWindow {
                     || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
                     || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
                     || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
+                soitaEpaOnnistunut()
 
                 rectangle_clicked.opacity = 1.0
                 rectangle_clicked.color = "#cb003a"
@@ -717,12 +851,26 @@ ApplicationWindow {
     }
 
     function oviAukeaa(){
+        soitaOnnistunut()
+
         rectangle_oviAuki.visible = true
         rectangle_oviAuki.opacity = 1.0
         aukioloajastin.start()
 
         label_oviLukossa.opacity = 1.0
         rectangle_ylapohja.height = 499
+    }
+
+    function soitaOnnistunut(){
+        sound_onnistunut.play()
+    }
+
+    function soitaEpaOnnistunut(){
+        sound_epaonnistunut.play()
+    }
+
+    function soitaNappainaani(){
+        sound_painallus.play()
     }
 
 }
