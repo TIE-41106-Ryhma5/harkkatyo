@@ -11,5 +11,6 @@
         <file>images/SormenjalkiVaalea.png</file>
         <file>images/TTY.png</file>
         <file>images/UKLippu.png</file>
+        <file>images/backspace.png</file>
     </qresource>
 </RCC>
