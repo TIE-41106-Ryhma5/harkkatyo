@@ -4,6 +4,7 @@ import QtQuick.Controls.Styles 1.4
 import QtSensors 5.0
 import QtMultimedia 5.5
 
+
 ApplicationWindow {
     id: applicationWindow1
     visible: true
@@ -11,6 +12,7 @@ ApplicationWindow {
     height: 1920
     title: qsTr("Avaax Ovijarjestelma")
 
+    // Värimäärittelyt
     property string virhevari : "#cb003a"
     property string paavari : "#0098ad"
     property string oikeinvari : "#0c6a27"
@@ -18,20 +20,31 @@ ApplicationWindow {
     property string alttekstivari : "#ffffff"
     property string taustavari : "#ffffff"
     property string nappulavari : "#ececec"
-    property string nappulaaktvari : "#676767"
+    property string nappulaaktvari : "#aaaaaa"
+    property string sjalkiakttaustavari : "#676767"
 
+    // Fonttimäärittelyt
+    property int fonttikoko_teksti : 58
+    property int fonttikoko_pieni_teksti  : 25
+    property int fonttikoko_otsikko : 80
+    property int fonttikoko_nappain : 80
+
+    // Aikamäärittelyt
     property int palautumisaika : 300
     property int lukemisaika : 1500
-    property int aukioloaika: 2500
-    property int haivytysaika: 130
-    property int ilmoitusaika: 2000
+    property int aukioloaika : 2500
+    property int haivytysaika : 130
+    property int ilmoitusaika : 2000
+    property int pinsyottoaika : 12000
     property int animaatioaika
 
-    property int sormiToleranssi: 10 // Toleranssi, jonka verran sormi saa liikkua ennen virheilmoitusta
+    // Sormenjäljen lukuun liittyvät muuttujat
+    property int sormiToleranssi: 20 // Toleranssi, jonka verran sormi saa liikkua ennen virheilmoitusta
     property real sormiX
     property real sormiY
     property bool epaonnistunut // Jos sormenjäljen lukeminen epäonnistuu
 
+    // Pin-koodin muuttujat
     property string oikeaPIN : "1234"
     property string eiPaasyaPIN : "4321"
     property string pin
@@ -39,6 +52,17 @@ ApplicationWindow {
     property string piiloPIN
     property bool pinVirhe
 
+    // Kielimuuttujat
+    property bool englanniksi : false
+    property string string_oviLukossa : englanniksi? qsTr("THE DOOR IS LOCKED") : qsTr("OVI ON LUKOSSA");
+    property string string_asetaOpKortti : englanniksi? qsTr("PLACE YOUR ID IN FRONT OF THE SCREEN") : qsTr("ASETA KULKUKORTTI NÄYTÖN ETEEN");
+    property string string_lueSormJalki : englanniksi? qsTr("OR SCAN YOUR FINGERPRINT") : qsTr("TAI LUE SORMENJÄLKESI");
+    property string string_syotaPin : englanniksi? qsTr("ENTER YOUR PIN") : qsTr("SYÖTÄ PIN-KOODISI");
+    property string string_sormenjaljenLuku : englanniksi? qsTr("SCANNING THE FINGERPRINT...") : qsTr("SORMENJÄLKEÄ LUETAAN..");
+    property string string_oviAuki : englanniksi? qsTr("THE DOOR IS OPEN") : qsTr("OVI ON AUKI");
+    property string string_pinVirhe : englanniksi? qsTr("INVALID PIN") : qsTr("VIRHEELLINEN PIN");
+    property string string_kielivalinta : englanniksi? qsTr("SUOMEKSI") : qsTr("IN ENGLISH");
+    property string string_lipunUrl : englanniksi? "images/FILippu.png" : "images/UKLippu.png";
 
     Audio {
         id: sound_painallus
@@ -76,7 +100,27 @@ ApplicationWindow {
             if (proxSensor.reading.near === true){
                 naytaNappaimisto()
                 soitaOnnistunut()
+                timer_pinsyottoajastin.restart()
             }
+        }
+    }
+
+    Timer {
+        id: timer_pinsyottoajastin
+        interval: pinsyottoaika
+
+        onTriggered:{
+            grid1.visible = false
+
+            rectangle_ylapohja.opacity = 1.0
+            rectangle_ylapohja.height = 499
+            label_oviLukossa.opacity = 1.0
+
+            label_syotaPIN.opacity = 0.0
+            image_opKortti.opacity = 1.0
+            label_asetaOpKortti.opacity = 1.0
+
+            label_piilotettuPIN.opacity = 0.0
         }
     }
 
@@ -177,8 +221,8 @@ ApplicationWindow {
             x: 176
             y: 183
             color: alttekstivari
-            text: qsTr("OVI ON LUKOSSA")
-            font.pixelSize: 58
+            text: string_oviLukossa
+            font.pixelSize: fonttikoko_teksti
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.verticalCenter: parent.verticalCenter
             verticalAlignment: Text.AlignVCenter
@@ -199,9 +243,9 @@ ApplicationWindow {
         x: 271
         y: 230
         color: tekstivari
-        text: qsTr("SYÖTÄ PIN-KOODISI")
+        text: string_syotaPin
         opacity: 0
-        font.pixelSize: 58
+        font.pixelSize: fonttikoko_teksti
         anchors.horizontalCenter: parent.horizontalCenter
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
@@ -228,9 +272,9 @@ ApplicationWindow {
             x: 271
             y: 230
             color: alttekstivari
-            text: qsTr("VIRHEELLINEN PIN")
+            text: string_pinVirhe
             anchors.verticalCenter: parent.verticalCenter
-            font.pixelSize: 58
+            font.pixelSize: fonttikoko_teksti
             anchors.horizontalCenter: parent.horizontalCenter
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
@@ -248,8 +292,8 @@ ApplicationWindow {
         y: 788
         width: 800
         color: tekstivari
-        text: qsTr("ASETA OPISKELIJAKORTTI NÄYTÖN ETEEN")
-        font.pixelSize: 58
+        text: string_asetaOpKortti
+        font.pixelSize: fonttikoko_teksti
         anchors.horizontalCenterOffset: 0
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
@@ -267,10 +311,10 @@ ApplicationWindow {
         z:1
         width: 800
         color: tekstivari
-        text: qsTr("TAI LUE SORMENJÄLKESI")
+        text: string_lueSormJalki
         anchors.horizontalCenter: parent.horizontalCenter
         horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: 58
+        font.pixelSize: fonttikoko_teksti
         wrapMode: Text.WordWrap
 
         Behavior on color {
@@ -330,15 +374,19 @@ ApplicationWindow {
                     implicitHeight: 180
                     border.width: 0
                     radius : 2
+                    color: button_nro7.pressed? nappulaaktvari : nappulavari
 
-                    color: nappulavari
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
+
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -346,9 +394,13 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "7"
                 paivitaPIN()
+
             }
+
+
         }
 
         Button {
@@ -364,14 +416,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro8.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -379,6 +435,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "8"
                 paivitaPIN()
             }
@@ -400,14 +457,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro9.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -415,6 +476,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "9"
                 paivitaPIN()
             }
@@ -434,14 +496,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro4.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -449,6 +515,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "4"
                 paivitaPIN()
             }
@@ -468,14 +535,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro5.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -484,6 +555,7 @@ ApplicationWindow {
             onClicked: {
                 soitaNappainaani()
                 pin += "5"
+                timer_pinsyottoajastin.restart()
                 paivitaPIN()
             }
         }
@@ -502,14 +574,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro6.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -517,6 +593,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "6"
                 paivitaPIN()
             }
@@ -536,14 +613,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro1.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -551,6 +632,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "1"
                 paivitaPIN()
             }
@@ -570,14 +652,14 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro2.pressed? nappulaaktvari : nappulavari;
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -585,6 +667,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "2"
                 paivitaPIN()
             }
@@ -604,14 +687,14 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro3.pressed? nappulaaktvari : nappulavari;
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -619,6 +702,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "3"
                 paivitaPIN()
             }
@@ -638,7 +722,11 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_backspace.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Image {
@@ -646,7 +734,7 @@ ApplicationWindow {
                     height: 90
                     anchors.horizontalCenterOffset: 0
                     anchors.horizontalCenter: parent.horizontalCenter
-                    fillMode: Image.Tile
+                    fillMode: Image.Pad
                     source: "images/backspace.png"
 
 
@@ -655,8 +743,10 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin = pin.substring( 0, pin.length-1 );
                 paivitaPIN()
+                englanniksi = true
             }
         }
 
@@ -674,14 +764,18 @@ ApplicationWindow {
                     border.width: 0
                     radius : 2
 
-                    color: nappulavari
+                    color: button_nro0.pressed? nappulaaktvari : nappulavari;
+
+                    Behavior on color {
+                        ColorAnimation { duration: haivytysaika }
+                    }
                 }
 
                 label: Text {
                     renderType: Text.NativeRendering
                     verticalAlignment: Text.AlignVCenter
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: 80
+                    font.pixelSize: fonttikoko_nappain
                     color: tekstivari
                     text: control.text
                 }
@@ -689,6 +783,7 @@ ApplicationWindow {
 
             onClicked: {
                 soitaNappainaani()
+                timer_pinsyottoajastin.restart()
                 pin += "0"
                 paivitaPIN()
             }
@@ -734,23 +829,23 @@ ApplicationWindow {
     }
 
     Image {
-        id: image_UK_lippu
+        id: image_lippu
         x: 934
         y: 47
         width: 120
         height: 100
         fillMode: Image.PreserveAspectFit
-        source: "images/UKLippu.png"
+        source: string_lipunUrl
 
         Text {
-            id: text_in_English
+            id: text_kielivalinta
             x: -7
             y: 90
-            text: qsTr("IN ENGLISH")
+            text: string_kielivalinta
             anchors.horizontalCenter: parent.horizontalCenter
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: 25
+            font.pixelSize: fonttikoko_pieni_teksti
             color: tekstivari
         }
     }
@@ -766,7 +861,7 @@ ApplicationWindow {
         onPressed:{
 
             rectangle_clicked.opacity = 1.0
-            rectangle_clicked.color = nappulaaktvari
+            rectangle_clicked.color = sjalkiakttaustavari
 
             animaatioaika = lukemisaika
             rectangle_load.width = 1028
@@ -775,7 +870,7 @@ ApplicationWindow {
             sormenjalkiajastin.start()
 
             label_lueSormJalki.color = alttekstivari
-            label_lueSormJalki.text = qsTr("SORMENJÄLKEÄ LUETAAN...")
+            label_lueSormJalki.text = string_sormenjaljenLuku
 
             image_sormenjalki.opacity = 0.0
             image_sormenjalki_vaalea.opacity = 1.0
@@ -823,7 +918,7 @@ ApplicationWindow {
 
     function asetaAloitustilaan() {
         rectangle_clicked.opacity = 0.0
-        rectangle_clicked.color = nappulaaktvari
+        rectangle_clicked.color = sjalkiakttaustavari
         animaatioaika = (palautumisaika/1028) * rectangle_load.width
         rectangle_load.width = 0
 
@@ -831,7 +926,7 @@ ApplicationWindow {
         sormenjalkiajastin.interval = lukemisaika
 
         label_lueSormJalki.color = tekstivari
-        label_lueSormJalki.text = qsTr("TAI LUE SORMENJÄLKESI")
+        label_lueSormJalki.text = string_lueSormJalki
 
         image_sormenjalki.opacity = 1.0
         image_sormenjalki_vaalea.opacity = 0.0
@@ -843,7 +938,7 @@ ApplicationWindow {
         y: 1300
         width: 1028
         height: 620
-        color: nappulaaktvari
+        color: sjalkiakttaustavari
         opacity: 0.0
         visible: true
         z: -1
@@ -879,8 +974,8 @@ ApplicationWindow {
             y: 788
             width: 800
             color: alttekstivari
-            text: qsTr("OVI ON AUKI")
-            font.pixelSize: 70
+            text: string_oviAuki
+            font.pixelSize: fonttikoko_otsikko
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
@@ -924,7 +1019,7 @@ ApplicationWindow {
         opacity: 0
         font.bold: true
         anchors.horizontalCenterOffset: 0
-        font.pixelSize: 70
+        font.pixelSize: fonttikoko_otsikko
         anchors.horizontalCenter: parent.horizontalCenter
 
         Behavior on opacity {
@@ -1033,7 +1128,7 @@ ApplicationWindow {
 
     function naytaPINVirhe(resettaaTeksti){
         if (resettaaTeksti){
-            label_PinVirhe.text = qsTr("VIRHEELLINEN PIN")
+            label_PinVirhe.text = string_pinVirhe
         }
 
         label_piilotettuPIN.color = virhevari

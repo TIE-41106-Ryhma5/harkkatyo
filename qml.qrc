@@ -12,5 +12,6 @@
         <file>images/TTY.png</file>
         <file>images/UKLippu.png</file>
         <file>images/backspace.png</file>
+        <file>images/FILippu.png</file>
     </qresource>
 </RCC>

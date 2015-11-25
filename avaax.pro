@@ -2,8 +2,10 @@ TEMPLATE = app
 
 QT += qml quick widgets
 QT += sensors
+android: QT += androidextras
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    vibrator.cpp
 
 RESOURCES += \
     qml.qrc
@@ -24,4 +26,7 @@ DISTFILES += \
     android/gradlew.bat
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+HEADERS += \
+    vibrator.h
 
