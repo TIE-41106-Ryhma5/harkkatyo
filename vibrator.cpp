@@ -13,7 +13,9 @@ void Vibrator::vibrate(int milliseconds) {
     if (vibratorService.isValid()) {
         jlong ms = milliseconds;
         jboolean hasvibro = vibratorService.callMethod<jboolean>("hasVibrator", "()Z");
-        vibratorService.callMethod<void>("vibrate", "(J)V", ms);
+        if (hasvibro){
+            vibratorService.callMethod<void>("vibrate", "(J)V", ms);
+        }
     } else {
         qDebug() << "No vibrator service available";
     }

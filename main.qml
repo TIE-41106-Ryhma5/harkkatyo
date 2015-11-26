@@ -36,6 +36,7 @@ ApplicationWindow {
     property int haivytysaika : 130
     property int ilmoitusaika : 2000
     property int pinsyottoaika : 12000
+    property int varinaaika : 50
     property int animaatioaika
 
     // Sormenjäljen lukuun liittyvät muuttujat
@@ -124,6 +125,7 @@ ApplicationWindow {
             label_syotaPIN.opacity = 0.0
             image_opKortti.opacity = 1.0
             label_asetaOpKortti.opacity = 1.0
+            label_asetaOpKortti.text = string_asetaOpKortti
 
             label_piilotettuPIN.opacity = 0.0
         }
@@ -172,6 +174,7 @@ ApplicationWindow {
             label_syotaPIN.opacity = 0.0
             image_opKortti.opacity = 1.0
             label_asetaOpKortti.opacity = 1.0
+            label_asetaOpKortti.text = string_asetaOpKortti
         }
     }
 
@@ -385,6 +388,12 @@ ApplicationWindow {
 
             }
 
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
+
 
         }
 
@@ -423,6 +432,12 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin += "8"
                 paivitaPIN()
+            }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
             }
         }
 
@@ -465,6 +480,12 @@ ApplicationWindow {
                 pin += "9"
                 paivitaPIN()
             }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
         }
 
         Button {
@@ -503,6 +524,12 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin += "4"
                 paivitaPIN()
+            }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
             }
         }
 
@@ -543,6 +570,12 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 paivitaPIN()
             }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
         }
 
         Button {
@@ -581,6 +614,11 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin += "6"
                 paivitaPIN()
+            }
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
             }
         }
 
@@ -621,6 +659,12 @@ ApplicationWindow {
                 pin += "1"
                 paivitaPIN()
             }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
         }
 
         Button {
@@ -656,6 +700,12 @@ ApplicationWindow {
                 pin += "2"
                 paivitaPIN()
             }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
         }
 
         Button {
@@ -690,6 +740,12 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin += "3"
                 paivitaPIN()
+            }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
             }
         }
 
@@ -732,6 +788,12 @@ ApplicationWindow {
                 pin = pin.substring( 0, pin.length-1 );
                 paivitaPIN()
             }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
+            }
         }
 
         Button {
@@ -770,6 +832,12 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin += "0"
                 paivitaPIN()
+            }
+
+            onPressedChanged: {
+                if (this.pressed === true){
+                    Vibrator.vibrate(varinaaika)
+                }
             }
         }
     }
@@ -886,6 +954,17 @@ ApplicationWindow {
                 } else {
                     englanniksi = false;
                 }
+
+                label_asetaOpKortti.text = string_asetaOpKortti
+                label_PinVirhe.text = string_pinVirhe
+                label_oviAuki.text = string_oviAuki
+                label_oviLukossa.text = string_oviLukossa
+                label_syotaPIN.text = string_syotaPin
+                label_lueSormJalki.text = string_lueSormJalki
+            }
+
+            onPressed: {
+                Vibrator.vibrate(varinaaika)
             }
 
             Image {
@@ -944,11 +1023,13 @@ ApplicationWindow {
             z: 2
             width: 300
             height: 400
+            anchors.verticalCenterOffset : 40
             anchors.verticalCenter: parent.verticalCenter
             anchors.horizontalCenterOffset: 0
             anchors.horizontalCenter: parent.horizontalCenter
 
             onPressed:{
+                Vibrator.vibrate(varinaaika)
 
                 rectangle_clicked.opacity = 1.0
                 rectangle_clicked.color = sjalkiakttaustavari
@@ -1111,6 +1192,7 @@ ApplicationWindow {
 
     function oviAukeaa(){
         soitaOnnistunut()
+        Vibrator.vibrate(varinaaika)
 
         rectangle_oviAuki.visible = true
         rectangle_oviAuki.opacity = 1.0
@@ -1184,9 +1266,9 @@ ApplicationWindow {
     function naytaPINVirhe(resettaaTeksti){
         if (resettaaTeksti){
             label_PinVirhe.text = string_pinVirhe
+            label_piilotettuPIN.color = virhevari
         }
 
-        label_piilotettuPIN.color = virhevari
         rectangle_pinVirhe.visible = true;
         rectangle_pinVirhe.opacity = 1.0;
 
