@@ -13,9 +13,5 @@
         <file>images/UKLippu.png</file>
         <file>images/backspace.png</file>
         <file>images/FILippu.png</file>
-        <file>sounds/merkkiaani3.mp3</file>
-        <file>sounds/merkkiaani4.mp3</file>
-        <file>sounds/merkkiaani5.mp3</file>
-        <file>sounds/merkkiaani6.mp3</file>
     </qresource>
 </RCC>

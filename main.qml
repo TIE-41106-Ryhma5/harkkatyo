@@ -1060,7 +1060,9 @@ ApplicationWindow {
                         || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
                         || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
                         || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
-                    soitaEpaOnnistunut()
+                    if (!epaonnistunut){
+                        soitaEpaOnnistunut()
+                    }
 
                     rectangle_clicked.opacity = 1.0
                     rectangle_clicked.color = virhevari
