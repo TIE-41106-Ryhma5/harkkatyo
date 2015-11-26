@@ -26,8 +26,8 @@ ApplicationWindow {
     // Fonttimäärittelyt
     property int fonttikoko_teksti : 58
     property int fonttikoko_pieni_teksti  : 25
-    property int fonttikoko_otsikko : 80
-    property int fonttikoko_nappain : 80
+    property int fonttikoko_otsikko : 90
+    property int fonttikoko_nappain : 85
 
     // Aikamäärittelyt
     property int palautumisaika : 300
@@ -62,7 +62,12 @@ ApplicationWindow {
     property string string_oviAuki : englanniksi? qsTr("THE DOOR IS OPEN") : qsTr("OVI ON AUKI");
     property string string_pinVirhe : englanniksi? qsTr("INVALID PIN") : qsTr("VIRHEELLINEN PIN");
     property string string_kielivalinta : englanniksi? qsTr("SUOMEKSI") : qsTr("IN ENGLISH");
+    property string string_eiOikeuksia : englanniksi? qsTr("NO PERMISSION") :  qsTr("EI PÄÄSYOIKEUTTA")
+    property string string_sormiVirhe : englanniksi? qsTr("FINGERPRINT NOT RECOGNIZED") : qsTr("SORMENJÄLKEÄ EI TUNNISTETTU")
     property string string_lipunUrl : englanniksi? "images/FILippu.png" : "images/UKLippu.png";
+
+    // Asettelu
+    property int ylapohja_aloituskorkeus : 500
 
     Audio {
         id: sound_painallus
@@ -113,7 +118,7 @@ ApplicationWindow {
             grid1.visible = false
 
             rectangle_ylapohja.opacity = 1.0
-            rectangle_ylapohja.height = 499
+            rectangle_ylapohja.height = ylapohja_aloituskorkeus
             label_oviLukossa.opacity = 1.0
 
             label_syotaPIN.opacity = 0.0
@@ -185,24 +190,15 @@ ApplicationWindow {
         y: 168
         width: 52
         height: 1752
+        z: 2
         fillMode: Image.Tile
         source: "images/Raidat.png"
-    }
-
-    Image {
-        id: rectangle_tty
-        x: 48
-        y: 47
-        width: 597
-        height: 100
-        fillMode: Image.Tile
-        source: "images/TTY.png"
     }
 
     Rectangle {
         id: rectangle_erottaja
         x: 50
-        y: 1280
+        y: 1292
         width: 1030
         height: 20
         color: paavari
@@ -213,7 +209,7 @@ ApplicationWindow {
         x: 49
         y: 193
         width: 1032
-        height: 499
+        height: ylapohja_aloituskorkeus
         color: paavari
 
         Label {
@@ -233,8 +229,50 @@ ApplicationWindow {
             }
         }
 
-        Behavior on height {
-            NumberAnimation {duration : haivytysaika }
+    }
+
+    Item {
+        id: idkorttiosio
+        x: 52
+        y: 692
+        width: 1028
+        height: 614
+
+        Label {
+            id: label_asetaOpKortti
+            x: 88
+            y: 66
+            width: 800
+            color: tekstivari
+            text: string_asetaOpKortti
+            verticalAlignment: Text.AlignVCenter
+            font.pixelSize: fonttikoko_teksti
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+
+            Behavior on opacity {
+                NumberAnimation { duration : haivytysaika }
+            }
+        }
+
+        Image {
+            id: image_opKortti
+            x: 360
+            y: 269
+            width: 255
+            height: 200
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            fillMode: Image.Tile
+            source: "images/OpKortti.png"
+            opacity: 1.0
+
+            Behavior on opacity {
+                NumberAnimation { duration: haivytysaika }
+            }
+
         }
     }
 
@@ -284,59 +322,6 @@ ApplicationWindow {
         Behavior on opacity {
             NumberAnimation { duration : haivytysaika }
         }
-    }
-
-    Label {
-        id: label_asetaOpKortti
-        x: 165
-        y: 788
-        width: 800
-        color: tekstivari
-        text: string_asetaOpKortti
-        font.pixelSize: fonttikoko_teksti
-        anchors.horizontalCenterOffset: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        wrapMode: Text.WordWrap
-
-        Behavior on opacity {
-            NumberAnimation { duration : haivytysaika }
-        }
-    }
-
-    Label {
-        id: label_lueSormJalki
-        x: 165
-        y: 1360
-        z:1
-        width: 800
-        color: tekstivari
-        text: string_lueSormJalki
-        anchors.horizontalCenter: parent.horizontalCenter
-        horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: fonttikoko_teksti
-        wrapMode: Text.WordWrap
-
-        Behavior on color {
-            ColorAnimation { duration: haivytysaika }
-        }
-    }
-
-    Image {
-        id: image_opKortti
-        x: 433
-        y: 961
-        width: 255
-        height: 200
-        anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.Tile
-        source: "images/OpKortti.png"
-        opacity: 1.0
-
-        Behavior on opacity {
-            NumberAnimation { duration: haivytysaika }
-        }
-
     }
 
     Grid {
@@ -746,7 +731,6 @@ ApplicationWindow {
                 timer_pinsyottoajastin.restart()
                 pin = pin.substring( 0, pin.length-1 );
                 paivitaPIN()
-                englanniksi = true
             }
         }
 
@@ -790,132 +774,6 @@ ApplicationWindow {
         }
     }
 
-    Image {
-        id: image_sormenjalki
-        x: 515
-        y: 1509
-        z: 1
-        width: 265
-        height: 345
-        anchors.horizontalCenterOffset: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.Tile
-        source: "images/Sormenjalki.png"
-
-        opacity: 1
-
-        Behavior on opacity {
-            NumberAnimation { duration: haivytysaika }
-        }
-    }
-
-    Image {
-        id: image_sormenjalki_vaalea
-        x: 515
-        y: 1509
-        z: 1
-        width: 265
-        height: 345
-        anchors.horizontalCenterOffset: 0
-        anchors.horizontalCenter: parent.horizontalCenter
-        fillMode: Image.Tile
-        source: "images/SormenjalkiVaalea.png"
-
-        opacity: 0
-
-        Behavior on opacity {
-            NumberAnimation { duration: haivytysaika }
-        }
-    }
-
-    Image {
-        id: image_lippu
-        x: 934
-        y: 47
-        width: 120
-        height: 100
-        fillMode: Image.PreserveAspectFit
-        source: string_lipunUrl
-
-        Text {
-            id: text_kielivalinta
-            x: -7
-            y: 90
-            text: string_kielivalinta
-            anchors.horizontalCenter: parent.horizontalCenter
-            verticalAlignment: Text.AlignVCenter
-            horizontalAlignment: Text.AlignHCenter
-            font.pixelSize: fonttikoko_pieni_teksti
-            color: tekstivari
-        }
-    }
-
-    MouseArea {
-        id: mouseArea1
-        x: 390
-        y: 1482
-        z: 2
-        width: 300
-        height: 400
-
-        onPressed:{
-
-            rectangle_clicked.opacity = 1.0
-            rectangle_clicked.color = sjalkiakttaustavari
-
-            animaatioaika = lukemisaika
-            rectangle_load.width = 1028
-            rectangle_load.opacity = 1.0
-
-            sormenjalkiajastin.start()
-
-            label_lueSormJalki.color = alttekstivari
-            label_lueSormJalki.text = string_sormenjaljenLuku
-
-            image_sormenjalki.opacity = 0.0
-            image_sormenjalki_vaalea.opacity = 1.0
-
-            sormiX = mouseArea1.mouseX
-            sormiY = mouseArea1.mouseY
-
-            epaonnistumisajastin.stop()
-            epaonnistunut = false
-
-            label_asetaOpKortti.text = proxSensor.reading
-        }
-
-        onPositionChanged: {
-            if (    ( sormiX > mouseArea1.mouseX + sormiToleranssi)
-                    || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
-                    || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
-                    || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
-                soitaEpaOnnistunut()
-
-                rectangle_clicked.opacity = 1.0
-                rectangle_clicked.color = virhevari
-                animaatioaika = (palautumisaika/1028) * rectangle_load.width
-                rectangle_load.width = 0
-                rectangle_load.opacity = 0.0
-
-                sormenjalkiajastin.stop()
-                sormenjalkiajastin.interval = lukemisaika
-
-                label_lueSormJalki.text = qsTr("SORMENJÄLKEÄ EI TUNNISTETTU")
-
-                epaonnistunut = true
-            }
-        }
-
-        onReleased:{
-            if (epaonnistunut === false){
-                asetaAloitustilaan()
-            } else {
-                epaonnistumisajastin.start()
-            }
-
-        }
-    }
-
     function asetaAloitustilaan() {
         rectangle_clicked.opacity = 0.0
         rectangle_clicked.color = sjalkiakttaustavari
@@ -933,33 +791,13 @@ ApplicationWindow {
     }
 
     Rectangle {
-        id: rectangle_clicked
-        x: 52
-        y: 1300
-        width: 1028
-        height: 620
-        color: sjalkiakttaustavari
-        opacity: 0.0
-        visible: true
-        z: -1
-
-        Behavior on opacity {
-            NumberAnimation{ duration: haivytysaika }
-        }
-
-        Behavior on color {
-            ColorAnimation { duration: haivytysaika }
-        }
-    }
-
-    Rectangle {
         id: rectangle_oviAuki
         x: 0
         y: 190
         width: 1080
         height: 1800
         color: oikeinvari
-        z: 2
+        z: 3
 
         visible: false
         opacity: 0.0
@@ -980,23 +818,6 @@ ApplicationWindow {
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-        }
-    }
-
-    Rectangle {
-        id: rectangle_load
-        x: 52
-        y: 1300
-        width: 0
-        height: 620
-        color: paavari
-
-        Behavior on width {
-            NumberAnimation { duration: animaatioaika }
-        }
-
-        Behavior on opacity {
-            NumberAnimation { duration: haivytysaika }
         }
     }
 
@@ -1031,6 +852,239 @@ ApplicationWindow {
         }
     }
 
+    Item {
+        id: ylapalkki
+        x: 0
+        y: 0
+        width: 1080
+        height: 193
+
+        Image {
+            id: rectangle_tty
+            x: 48
+            y: 47
+            width: 597
+            height: 100
+            anchors.verticalCenter: parent.verticalCenter
+            fillMode: Image.Tile
+            source: "images/TTY.png"
+        }
+
+        MouseArea {
+            id: mouseArea_kielivalinta
+            x: 880
+            y: 47
+            width: 170
+            height: 130
+            anchors.verticalCenter: parent.verticalCenter
+            z: 3
+
+            onClicked:{
+                soitaNappainaani()
+                if (englanniksi === false){
+                    englanniksi = true;
+                } else {
+                    englanniksi = false;
+                }
+            }
+
+            Image {
+                id: image_lippu
+                x: 0
+                y: 0
+                width: 120
+                height: 100
+                anchors.horizontalCenter: parent.horizontalCenter
+                fillMode: Image.PreserveAspectFit
+                source: string_lipunUrl
+            }
+
+            Text {
+                id: text_kielivalinta
+                x: 0
+                y: 100
+                text: string_kielivalinta
+                anchors.horizontalCenter: parent.horizontalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+                font.pixelSize: fonttikoko_pieni_teksti
+                color: tekstivari
+            }
+        }
+    }
+
+    Item {
+        id: sormenjalkiosio
+        x: 52
+        y: 1306
+        width: 1028
+        height: 614
+
+        Rectangle {
+            id: rectangle_clicked
+            color: sjalkiakttaustavari
+            opacity: 0.0
+            visible: true
+            z: -1
+
+            Behavior on opacity {
+                NumberAnimation{ duration: haivytysaika }
+            }
+
+            Behavior on color {
+                ColorAnimation { duration: haivytysaika }
+            }
+            anchors.fill: parent
+        }
+
+        MouseArea {
+            id: mouseArea1
+            x: 338
+            y: 161
+            z: 2
+            width: 300
+            height: 400
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.horizontalCenterOffset: 0
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            onPressed:{
+
+                rectangle_clicked.opacity = 1.0
+                rectangle_clicked.color = sjalkiakttaustavari
+
+                animaatioaika = lukemisaika
+                rectangle_load.width = 1028
+                rectangle_load.opacity = 1.0
+
+                sormenjalkiajastin.start()
+
+                label_lueSormJalki.color = alttekstivari
+                label_lueSormJalki.text = string_sormenjaljenLuku
+
+                image_sormenjalki.opacity = 0.0
+                image_sormenjalki_vaalea.opacity = 1.0
+
+                sormiX = mouseArea1.mouseX
+                sormiY = mouseArea1.mouseY
+
+                epaonnistumisajastin.stop()
+                epaonnistunut = false
+
+                label_asetaOpKortti.text = proxSensor.reading
+            }
+
+            onPositionChanged: {
+                if (    ( sormiX > mouseArea1.mouseX + sormiToleranssi)
+                        || ( sormiX < mouseArea1.mouseX - sormiToleranssi)
+                        || ( sormiY > mouseArea1.mouseY + sormiToleranssi)
+                        || ( sormiY < mouseArea1.mouseY - sormiToleranssi)){
+                    soitaEpaOnnistunut()
+
+                    rectangle_clicked.opacity = 1.0
+                    rectangle_clicked.color = virhevari
+                    animaatioaika = (palautumisaika/1028) * rectangle_load.width
+                    rectangle_load.width = 0
+                    rectangle_load.opacity = 0.0
+
+                    sormenjalkiajastin.stop()
+                    sormenjalkiajastin.interval = lukemisaika
+
+                    label_lueSormJalki.text = string_sormiVirhe
+
+                    epaonnistunut = true
+                }
+            }
+
+            onReleased:{
+                if (epaonnistunut === false){
+                    asetaAloitustilaan()
+                } else {
+                    epaonnistumisajastin.start()
+                }
+
+            }
+
+            Image {
+                id: image_sormenjalki_vaalea
+                x: 17
+                y: 27
+                z: 1
+                width: 265
+                height: 345
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenterOffset: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                fillMode: Image.Tile
+                source: "images/SormenjalkiVaalea.png"
+
+                opacity: 0
+
+                Behavior on opacity {
+                    NumberAnimation { duration: haivytysaika }
+                }
+            }
+
+            Image {
+                id: image_sormenjalki
+                x: -9
+                y: 27
+                z: 1
+                width: 265
+                height: 345
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenterOffset: 0
+                anchors.horizontalCenter: parent.horizontalCenter
+                fillMode: Image.Tile
+                source: "images/Sormenjalki.png"
+
+                opacity: 1
+
+                Behavior on opacity {
+                    NumberAnimation { duration: haivytysaika }
+                }
+            }
+        }
+
+        Label {
+            id: label_lueSormJalki
+            x: 88
+            y: 40
+            z:1
+            width: 800
+            color: tekstivari
+            text: string_lueSormJalki
+            anchors.horizontalCenterOffset: 0
+            verticalAlignment: Text.AlignVCenter
+            anchors.horizontalCenter: parent.horizontalCenter
+            horizontalAlignment: Text.AlignHCenter
+            font.pixelSize: fonttikoko_teksti
+            wrapMode: Text.WordWrap
+
+            Behavior on color {
+                ColorAnimation { duration: haivytysaika }
+            }
+        }
+
+        Rectangle {
+            id: rectangle_load
+            x: 0
+            y: 0
+            width: 0
+            height: 620
+            color: paavari
+
+            Behavior on width {
+                NumberAnimation { duration: animaatioaika }
+            }
+
+            Behavior on opacity {
+                NumberAnimation { duration: haivytysaika }
+            }
+        }
+    }
+
+
 
 
     function naytaNappaimisto(){
@@ -1063,7 +1117,7 @@ ApplicationWindow {
         aukioloajastin.start()
 
         label_oviLukossa.opacity = 1.0
-        rectangle_ylapohja.height = 499
+        rectangle_ylapohja.height = ylapohja_aloituskorkeus
 
         pin = ""
         label_piilotettuPIN.opacity = 0.0
@@ -1115,11 +1169,12 @@ ApplicationWindow {
     function tarkistaPIN(){
         if (pin === oikeaPIN){
             oviAukeaa()
+            soitaOnnistunut()
         } else if (pin === eiPaasyaPIN){
             pin = "";
-            label_PinVirhe.text = qsTr("EI PÄÄSYOIKEUTTA")
-
+            label_PinVirhe.text = string_eiOikeuksia
             naytaPINVirhe(false)
+
         }else {
             pin = "";
             naytaPINVirhe(true)
@@ -1137,6 +1192,8 @@ ApplicationWindow {
 
         timer_epaonnistumisajastinPIN.start()
         pinVirhe = true;
+
+        soitaEpaOnnistunut()
     }
 
 }
